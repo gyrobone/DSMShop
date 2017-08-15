@@ -1,0 +1,10 @@
+name: DSMShop
+main: com.syrical.dsmshop.DSMShop
+version: 1.0 Alpha
+commands:
+    shop:
+      description: Opens Shop GUI
+      usage: /<command>
+    checkprice:
+      description: Checks price of an item
+      usage: /<command> <world> <item>

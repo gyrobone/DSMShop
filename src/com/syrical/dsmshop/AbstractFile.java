@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.Plugin;
 
 public class AbstractFile {
 
@@ -12,9 +13,9 @@ public class AbstractFile {
 	private File file;
 	protected FileConfiguration config;
 	
-	public AbstractFile (DSMShop main, String fileName) {
-		this.main = main;
-		this.file = new File(main.getDataFolder(), fileName);
+	public AbstractFile (Plugin plugin, String fileName) {
+		this.main = (DSMShop) plugin;
+		this.file = new File(plugin.getDataFolder(), fileName);
 		if (!file.exists()) {
 			try {
 				file.createNewFile();

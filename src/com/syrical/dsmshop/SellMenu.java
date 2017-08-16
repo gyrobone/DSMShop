@@ -14,23 +14,18 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Wool;
 import org.bukkit.plugin.Plugin;
 
-public class ShopMenu implements Listener {
+public class SellMenu implements Listener {
 
-	private Inventory inv;
+	private Inventory sellInv;
 	private ItemStack buy, sell;
-	private SellMenu sellMenu;
-	private BuyMenu buyMenu;
 	
-	public ShopMenu(Plugin plugin) {
-		inv = Bukkit.getServer().createInventory(null, 9, "Buy or Sell Items");
+	public SellMenu(Plugin plugin) {
+		sellInv = Bukkit.getServer().createInventory(null, 9, "Sell Menu");
 		buy = createItem(DyeColor.GREEN, "Buy");
 		sell = createItem(DyeColor.YELLOW, "Sell");
 		
-		buyMenu = new BuyMenu(plugin);
-		sellMenu = new SellMenu(plugin);
-		
-		inv.setItem(3, buy);
-		inv.setItem(5, sell);
+		sellInv.setItem(3, buy);
+		sellInv.setItem(5, sell);
 		
 		Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
 	}
@@ -46,25 +41,24 @@ public class ShopMenu implements Listener {
 	}
 	
 	public void show (Player p) {
-		p.openInventory(inv);
+		p.openInventory(sellInv);
 	}
 	
 	@EventHandler
 	public void onInventoryClick (InventoryClickEvent e) {
-		Player p = (Player) e.getWhoClicked();
-		if(!e.getInventory().getName().equalsIgnoreCase(inv.getName())) return;
+		if(!e.getInventory().getName().equalsIgnoreCase(sellInv.getName())) return;
 		if(e.getCurrentItem().getItemMeta() == null) return;
 		if(e.getCurrentItem().getItemMeta().getDisplayName().contains("Buy")) {
 			//Buy Menu
 			e.setCancelled(true);
+			e.getWhoClicked().sendMessage("Buy");
 			e.getWhoClicked().closeInventory();
-			buyMenu.show(p);
 		}
 		if(e.getCurrentItem().getItemMeta().getDisplayName().contains("Sell")) {
 			//Sell Menu
 			e.setCancelled(true);
+			e.getWhoClicked().sendMessage("Sell");
 			e.getWhoClicked().closeInventory();
-			sellMenu.show(p);
 		}
 	}
 	

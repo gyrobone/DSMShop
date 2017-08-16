@@ -15,8 +15,8 @@ import com.syrical.dsmshop.AbstractFile;
 public class OreSell extends AbstractFile implements Listener {
 	
 	private Inventory oreBuy;
-	private ItemStack coal, charcoal, clay, flint, ironingot, goldingot, diamond, emerald, quartz;
-	
+	private ItemStack diamond;
+	//coal, charcoal, clay, flint, ironingot, goldingot, diamond, emerald, quartz
 	public OreSell (Plugin plugin) {
 		super(plugin, "shopdata.yml");
 		oreBuy = Bukkit.getServer().createInventory(null, 54, "Buy Ores");
@@ -43,12 +43,12 @@ public class OreSell extends AbstractFile implements Listener {
 	@EventHandler
 	public void onInventoryClick (InventoryClickEvent e) {
 		Player p = (Player) e.getWhoClicked();
-		String world = p.getWorld().getName();
-		String item = e.getCurrentItem().getType().name().toLowerCase();
+		//String world = p.getWorld().getName();
+		//String item = e.getCurrentItem().getType().name().toLowerCase();
 		if(!e.getInventory().getName().equalsIgnoreCase(oreBuy.getName())) return;
 		if(e.getCurrentItem().getType() == Material.DIAMOND) {
 			if(e.isRightClick()) {
-				Integer buyPrice = (int) config.get(world + "." + item.toLowerCase() + ".buyprice");
+				//Integer buyPrice = (int) config.get(world + "." + item.toLowerCase() + ".buyprice");
 				e.setCancelled(true);
 				e.getWhoClicked().closeInventory();
 				//pData.removeCredits(p, buyPrice * 64);
@@ -56,7 +56,7 @@ public class OreSell extends AbstractFile implements Listener {
 				p.getInventory().addItem(diamonds);
 				
 			} else if (e.isLeftClick()){
-				Integer buyPrice = (int) config.get(world + "." + item.toLowerCase() + ".buyprice");
+				//Integer buyPrice = (int) config.get(world + "." + item.toLowerCase() + ".buyprice");
 				e.setCancelled(true);
 				e.getWhoClicked().closeInventory();
 				//pData.removeCredits(p, buyPrice);

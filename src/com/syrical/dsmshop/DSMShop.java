@@ -8,17 +8,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.syrical.dsmecon.PlayerData;
-import com.syrical.dsmshop.buymenus.OreBuy;
+//import com.syrical.dsmecon.PlayerData;
+//import com.syrical.dsmshop.buymenus.OreBuy;
 
 public class DSMShop extends JavaPlugin implements Listener {
 
 	private ShopMenu shopMenu;
 	private ShopData shopData;
-	private BuyMenu buyMenu;
-	private OreBuy oreBuy;
-	private SellMenu sellMenu;
-	private PlayerData pData;
+	//private BuyMenu buyMenu;
+	//private OreBuy oreBuy;
+	//private SellMenu sellMenu;
+	//private PlayerData pData;
 	
 	@Override
 	public void onEnable() {

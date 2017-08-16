@@ -1,29 +1,22 @@
 package com.syrical.dsmshop.buymenus;
 
-import java.util.Arrays;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
-import com.syrical.dsmecon.DSMEcon;
-import com.syrical.dsmecon.PlayerData;
 import com.syrical.dsmshop.AbstractFile;
 
 public class OreBuy extends AbstractFile implements Listener {
 	
 	private Inventory oreBuy;
-	private ItemStack coal, charcoal, clay, flint, ironingot, goldingot, diamond, emerald, quartz;
-	
+	private ItemStack diamond;
+	//coal, charcoal, clay, flint, ironingot, goldingot, diamond, emerald, quartz
 	public OreBuy (Plugin plugin) {
 		super(plugin, "shopdata.yml");
 		oreBuy = Bukkit.getServer().createInventory(null, 54, "Buy Ores");
@@ -50,12 +43,12 @@ public class OreBuy extends AbstractFile implements Listener {
 	@EventHandler
 	public void onInventoryClick (InventoryClickEvent e) {
 		Player p = (Player) e.getWhoClicked();
-		String world = p.getWorld().getName();
-		String item = e.getCurrentItem().getType().name().toLowerCase();
+		//String world = p.getWorld().getName();
+		//String item = e.getCurrentItem().getType().name().toLowerCase();
 		if(!e.getInventory().getName().equalsIgnoreCase(oreBuy.getName())) return;
 		if(e.getCurrentItem().getType() == Material.DIAMOND) {
 			if(e.isRightClick()) {
-				Integer buyPrice = (int) config.get(world + "." + item.toLowerCase() + ".buyprice");
+				//Integer buyPrice = (int) config.get(world + "." + item.toLowerCase() + ".buyprice");
 				e.setCancelled(true);
 				e.getWhoClicked().closeInventory();
 				//pData.removeCredits(p, buyPrice * 64);
@@ -63,7 +56,7 @@ public class OreBuy extends AbstractFile implements Listener {
 				p.getInventory().addItem(diamonds);
 				
 			} else if (e.isLeftClick()){
-				Integer buyPrice = (int) config.get(world + "." + item.toLowerCase() + ".buyprice");
+				//Integer buyPrice = (int) config.get(world + "." + item.toLowerCase() + ".buyprice");
 				e.setCancelled(true);
 				e.getWhoClicked().closeInventory();
 				//pData.removeCredits(p, buyPrice);

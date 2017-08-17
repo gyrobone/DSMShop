@@ -14,22 +14,21 @@ import com.syrical.dsmshop.AbstractFile;
 
 public class OreSell extends AbstractFile implements Listener {
 	
-	private Inventory oreBuy;
+	private Inventory oreSell;
 	private ItemStack diamond;
 	//coal, charcoal, clay, flint, ironingot, goldingot, diamond, emerald, quartz
 	public OreSell (Plugin plugin) {
 		super(plugin, "shopdata.yml");
-		oreBuy = Bukkit.getServer().createInventory(null, 54, "Buy Ores");
+		oreSell = Bukkit.getServer().createInventory(null, 54, "Sell Ores");
 		diamond = createItem("diamond");
 		
-		oreBuy.setItem(0, diamond);
+		oreSell.setItem(0, diamond);
 		
 		Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 	
 	public void show (Player p) {
-		
-		p.openInventory(oreBuy);
+		p.openInventory(oreSell);
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -43,32 +42,31 @@ public class OreSell extends AbstractFile implements Listener {
 	@EventHandler
 	public void onInventoryClick (InventoryClickEvent e) {
 		Player p = (Player) e.getWhoClicked();
-		//String world = p.getWorld().getName();
-		//String item = e.getCurrentItem().getType().name().toLowerCase();
-		if(!e.getInventory().getName().equalsIgnoreCase(oreBuy.getName())) return;
+		String world = p.getWorld().getName();
+		String item = e.getCurrentItem().getType().name().toLowerCase();
+		if(!e.getInventory().getName().equalsIgnoreCase(oreSell.getName())) return;
 		if(e.getCurrentItem().getType() == Material.DIAMOND) {
 			if(e.isRightClick()) {
-				//Integer buyPrice = (int) config.get(world + "." + item.toLowerCase() + ".buyprice");
+				Integer sellPrice = (int) config.get(world + "." + item.toLowerCase() + ".sellprice");
 				e.setCancelled(true);
 				e.getWhoClicked().closeInventory();
-				//pData.removeCredits(p, buyPrice * 64);
-				ItemStack diamonds = new ItemStack(Material.DIAMOND, 65);
-				p.getInventory().addItem(diamonds);
-				
+				p.chat("/addcredits " + (sellPrice * 64));
+				p.chat("/balance");
+				ItemStack diamonds = new ItemStack(Material.DIAMOND, 64);
+				p.getInventory().removeItem(diamonds);
 			} else if (e.isLeftClick()){
-				//Integer buyPrice = (int) config.get(world + "." + item.toLowerCase() + ".buyprice");
+				Integer sellPrice = (int) config.get(world + "." + item.toLowerCase() + ".sellprice");
 				e.setCancelled(true);
 				e.getWhoClicked().closeInventory();
-				//pData.removeCredits(p, buyPrice);
-				ItemStack diamonds = new ItemStack(Material.DIAMOND, 2);
-				p.getInventory().addItem(diamonds);
+				p.chat("/addcredits " + sellPrice);
+				p.chat("/balance");
+				ItemStack diamonds = new ItemStack(Material.DIAMOND, 1);
+				p.getInventory().removeItem(diamonds);
 			}
 			if(e.isShiftClick()) {
 				p.getInventory().removeItem(new ItemStack(Material.DIAMOND,1));
 			}
-			p.getInventory().removeItem(new ItemStack(Material.DIAMOND,1));
 			p.updateInventory();
-			
 		}
 	}
 	

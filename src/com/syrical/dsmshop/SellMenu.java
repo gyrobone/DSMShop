@@ -14,18 +14,21 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Wool;
 import org.bukkit.plugin.Plugin;
 
+import com.syrical.dsmshop.sellmenus.OreSell;
+
 public class SellMenu implements Listener {
 
 	private Inventory sellInv;
-	private ItemStack buy, sell;
+	private ItemStack ores;
+	private OreSell oreSell;
 	
 	public SellMenu(Plugin plugin) {
 		sellInv = Bukkit.getServer().createInventory(null, 9, "Sell Menu");
-		buy = createItem(DyeColor.GREEN, "Buy");
-		sell = createItem(DyeColor.YELLOW, "Sell");
+		ores = createItem(DyeColor.YELLOW, "Sell Ores");
 		
-		sellInv.setItem(3, buy);
-		sellInv.setItem(5, sell);
+		oreSell = new OreSell(plugin);
+		
+		sellInv.setItem(0, ores);
 		
 		Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
 	}
@@ -46,19 +49,14 @@ public class SellMenu implements Listener {
 	
 	@EventHandler
 	public void onInventoryClick (InventoryClickEvent e) {
+		Player p = (Player) e.getWhoClicked();
 		if(!e.getInventory().getName().equalsIgnoreCase(sellInv.getName())) return;
 		if(e.getCurrentItem().getItemMeta() == null) return;
-		if(e.getCurrentItem().getItemMeta().getDisplayName().contains("Buy")) {
+		if(e.getCurrentItem().getItemMeta().getDisplayName().contains("Sell Ores")) {
 			//Buy Menu
 			e.setCancelled(true);
-			e.getWhoClicked().sendMessage("Buy");
-			e.getWhoClicked().closeInventory();
-		}
-		if(e.getCurrentItem().getItemMeta().getDisplayName().contains("Sell")) {
-			//Sell Menu
-			e.setCancelled(true);
-			e.getWhoClicked().sendMessage("Sell");
-			e.getWhoClicked().closeInventory();
+			p.closeInventory();
+			oreSell.show(p);
 		}
 	}
 	

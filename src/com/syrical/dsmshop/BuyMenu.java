@@ -55,13 +55,8 @@ public class BuyMenu implements Listener {
 		if(e.getCurrentItem().getItemMeta().getDisplayName().contains("Buy Ores")) {
 			//Buy Menu
 			e.setCancelled(true);
-			e.getWhoClicked().closeInventory();
+			p.closeInventory();
 			oreBuy.show(p);
-		}
-		if(e.getCurrentItem().getItemMeta().getDisplayName().contains("Sell")) {
-			//Sell Menu
-			e.setCancelled(true);
-			e.getWhoClicked().closeInventory();
 		}
 	}
 	

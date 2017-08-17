@@ -9,12 +9,12 @@ import org.bukkit.plugin.Plugin;
 
 public class AbstractFile {
 
-	protected DSMShop main;
+	protected Plugin plugin;
 	private File file;
-	protected FileConfiguration config;
+	public FileConfiguration config;
 	
 	public AbstractFile (Plugin plugin, String fileName) {
-		this.main = (DSMShop) plugin;
+		this.plugin = plugin;
 		this.file = new File(plugin.getDataFolder(), fileName);
 		if (!file.exists()) {
 			try {

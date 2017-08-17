@@ -28,7 +28,6 @@ public class OreBuy extends AbstractFile implements Listener {
 	}
 	
 	public void show (Player p) {
-		
 		p.openInventory(oreBuy);
 	}
 	
@@ -43,23 +42,24 @@ public class OreBuy extends AbstractFile implements Listener {
 	@EventHandler
 	public void onInventoryClick (InventoryClickEvent e) {
 		Player p = (Player) e.getWhoClicked();
-		//String world = p.getWorld().getName();
-		//String item = e.getCurrentItem().getType().name().toLowerCase();
+		String world = p.getWorld().getName();
+		String item = e.getCurrentItem().getType().name().toLowerCase();
 		if(!e.getInventory().getName().equalsIgnoreCase(oreBuy.getName())) return;
 		if(e.getCurrentItem().getType() == Material.DIAMOND) {
 			if(e.isRightClick()) {
-				//Integer buyPrice = (int) config.get(world + "." + item.toLowerCase() + ".buyprice");
+				Integer buyPrice = (int) config.get(world + "." + item.toLowerCase() + ".buyprice");
 				e.setCancelled(true);
 				e.getWhoClicked().closeInventory();
-				//pData.removeCredits(p, buyPrice * 64);
+				p.chat("/removecredits " + (buyPrice * 64));
+				p.chat("/balance");
 				ItemStack diamonds = new ItemStack(Material.DIAMOND, 65);
 				p.getInventory().addItem(diamonds);
-				
 			} else if (e.isLeftClick()){
-				//Integer buyPrice = (int) config.get(world + "." + item.toLowerCase() + ".buyprice");
+				Integer buyPrice = (int) config.get(world + "." + item.toLowerCase() + ".buyprice");
 				e.setCancelled(true);
 				e.getWhoClicked().closeInventory();
-				//pData.removeCredits(p, buyPrice);
+				p.chat("/removecredits " + buyPrice);
+				p.chat("/balance");
 				ItemStack diamonds = new ItemStack(Material.DIAMOND, 2);
 				p.getInventory().addItem(diamonds);
 			}
@@ -68,7 +68,6 @@ public class OreBuy extends AbstractFile implements Listener {
 			}
 			p.getInventory().removeItem(new ItemStack(Material.DIAMOND,1));
 			p.updateInventory();
-			
 		}
 	}
 	

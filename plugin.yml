@@ -8,3 +8,19 @@ commands:
     checkprice:
       description: Checks price of an item
       usage: /<command> <world> <item>
+    sell:
+      description: Open Sell Menu
+      usage: /<command>
+    balance:
+      aliases: [bal]
+      description: Gives current balance
+      usage: /<command>
+    addcredits:
+      description: Add credits to plyaer's balance
+      usage: /<command>
+    removecredits:
+      description: Removes credits from plyaer's balance
+      usage: /<command>
+    pay:
+      description: Pay another player
+      usage: /<command>

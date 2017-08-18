@@ -69,13 +69,16 @@ public class OreBuy extends AbstractFile implements Listener {
 	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onInventoryClick (InventoryClickEvent e) {
+		if (e.getCurrentItem() == null) return;
+		if (e.getCurrentItem().getType() == Material.AIR) return;
+		if(!e.getInventory().getName().equalsIgnoreCase(oreBuy.getName())) return;
+		
 		Player p = (Player) e.getWhoClicked();
 		String world = p.getWorld().getName();
 		String item = e.getCurrentItem().getType().name().toLowerCase();
 		Material itemMat = e.getCurrentItem().getType();
 		
 		if(e.getCurrentItem().getType() == Material.WOOL) return;
-		if (e.getCurrentItem() == null) return;
 		if(!e.getInventory().getName().equalsIgnoreCase(oreBuy.getName())) return;
 		
 		Integer buyPrice = (int) config.get(world + "." + item.toLowerCase() + ".buyprice");

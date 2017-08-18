@@ -2,11 +2,15 @@ package com.syrical.dsmshop;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.Sign;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -15,6 +19,7 @@ public class DSMShop extends JavaPlugin implements Listener {
 	private ShopMenu shopMenu;
 	private ShopData shopData;
 	private PlayerData playerData;
+	public static ShopCreator sCreate = new ShopCreator(null);
 	
 	@Override
 	public void onEnable() {
@@ -24,7 +29,7 @@ public class DSMShop extends JavaPlugin implements Listener {
 		}
 		
 		getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "DSMShop has been enabled");
-		shopMenu = new ShopMenu(this);
+		this.shopMenu = new ShopMenu(this);
 		this.shopData = new ShopData(this);
 		this.playerData = new PlayerData(this);
 		Bukkit.getServer().getPluginManager().registerEvents(this, this);
@@ -46,15 +51,35 @@ public class DSMShop extends JavaPlugin implements Listener {
 		
 	}
 	
+	@EventHandler
+	public void onSignClick (PlayerInteractEvent e) {
+		
+		Player p = (Player) e.getPlayer();
+		Block b = e.getClickedBlock();
+		
+		if (b.getType() == Material.WALL_SIGN) {
+			Sign s = (Sign) b.getState();
+			if(s.getLine(2).toLowerCase().equalsIgnoreCase(ChatColor.DARK_GREEN + ""+ ChatColor.BOLD + "Active")) {
+				shopMenu.show(p);
+			}
+		}
+	}
+	
 	@SuppressWarnings("deprecation")
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		
 		if (sender instanceof Player) {
 			
 			Player player = (Player) sender;
+			String pName = player.getName();
 			String lowerCmd = cmd.getName().toLowerCase();
 			
 			switch (lowerCmd) {
+			
+				case "shopcreate":
+					player.sendMessage(ChatColor.GREEN + "Click a sign to create a shop");
+					Bukkit.getServer().getPluginManager().registerEvents(sCreate, this);
+					return true;
 			
 				case "addcredits":
 					int amount = Integer.parseInt(args[0]);
@@ -86,10 +111,15 @@ public class DSMShop extends JavaPlugin implements Listener {
 							}
 					}
 				
-				return true;	
+					return true;	
 			
 				case "shop":
-					shopMenu.show(player);
+					if(Bukkit.getServer().getPlayer(pName).isOp() == true) {
+						shopMenu.show(player);
+					} else {
+						player.sendMessage(ChatColor.RED + "You cannot use this");
+					}
+					
 					return true;
 				
 				case "checkprice":

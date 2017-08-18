@@ -65,6 +65,8 @@ public class OreSell extends AbstractFile implements Listener {
 		Player p = (Player) e.getWhoClicked();
 		String world = p.getWorld().getName();
 		if (e.getCurrentItem() == null) return;
+		if (e.getCurrentItem().getType() == Material.AIR) return;
+		if(!e.getInventory().getName().equalsIgnoreCase(oreSell.getName())) return;
 		String item = e.getCurrentItem().getType().name().toLowerCase();
 		Material itemMat = e.getCurrentItem().getType();
 		if(!e.getInventory().getName().equalsIgnoreCase(oreSell.getName())) return;

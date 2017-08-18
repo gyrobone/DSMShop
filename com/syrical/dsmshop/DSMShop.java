@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -54,17 +55,22 @@ public class DSMShop extends JavaPlugin implements Listener {
 	@EventHandler
 	public void onSignClick (PlayerInteractEvent e) {
 		
-		Player p = (Player) e.getPlayer();
-		Block b = e.getClickedBlock();
-		
-		if (b.getType() == Material.WALL_SIGN) {
-			Sign s = (Sign) b.getState();
-			if(s.getLine(2).toLowerCase().equalsIgnoreCase(ChatColor.DARK_GREEN + ""+ ChatColor.BOLD + "Active")) {
-				if(s.getLine(0).toLowerCase().equalsIgnoreCase("[Shop]")) {
-					shopMenu.show(p);
+		if ((e.getAction() == Action.RIGHT_CLICK_BLOCK) || (e.getAction() == Action.LEFT_CLICK_BLOCK)) {
+			Player p = (Player) e.getPlayer();
+			Block b = e.getClickedBlock();
+			
+			if (b.getType() == Material.WALL_SIGN) {
+				Sign s = (Sign) b.getState();
+				if(s.getLine(2).toLowerCase().equalsIgnoreCase(ChatColor.DARK_GREEN + ""+ ChatColor.BOLD + "Active")) {
+					if(s.getLine(0).toLowerCase().equalsIgnoreCase("[Shop]")) {
+						shopMenu.show(p);
+					}
 				}
+			} else {
+				return;
 			}
 		}
+		
 	}
 	
 	@SuppressWarnings("deprecation")

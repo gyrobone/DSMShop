@@ -35,9 +35,10 @@ public class PlayerData extends AbstractFile {
 		save();
 	}
 	
-	public void getCredits (Player p) {
+	public Integer getCredits (Player p) {
 		p.sendMessage(ChatColor.GREEN + "Balance: " + config.get(p.getUniqueId().toString() + ".credits"));
-		save();
+		Integer credits = (int) config.get(p.getUniqueId().toString() + ".credits");
+		return credits;
 	}
 	
 	public void payCredits (Player from, Player to, int i) {

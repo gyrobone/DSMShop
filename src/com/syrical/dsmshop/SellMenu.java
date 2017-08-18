@@ -50,12 +50,12 @@ public class SellMenu implements Listener {
 	@EventHandler
 	public void onInventoryClick (InventoryClickEvent e) {
 		Player p = (Player) e.getWhoClicked();
+		if (e.getCurrentItem() == null) return;
 		if(!e.getInventory().getName().equalsIgnoreCase(sellInv.getName())) return;
 		if(e.getCurrentItem().getItemMeta() == null) return;
 		if(e.getCurrentItem().getItemMeta().getDisplayName().contains("Sell Ores")) {
 			//Buy Menu
 			e.setCancelled(true);
-			p.closeInventory();
 			oreSell.show(p);
 		}
 	}

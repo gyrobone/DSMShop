@@ -4,6 +4,5 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="C:/Users/Waylon/Desktop/SpigotPlugin/craftbukkit-1.12.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Waylon/Desktop/SpigotPlugin/spigot-1.12.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Waylon/Desktop/SpigotPlugin/plugins/DSMEcon.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

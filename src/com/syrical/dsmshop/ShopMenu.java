@@ -52,18 +52,17 @@ public class ShopMenu implements Listener {
 	@EventHandler
 	public void onInventoryClick (InventoryClickEvent e) {
 		Player p = (Player) e.getWhoClicked();
+		if (e.getCurrentItem() == null) return;
 		if(!e.getInventory().getName().equalsIgnoreCase(inv.getName())) return;
 		if(e.getCurrentItem().getItemMeta() == null) return;
 		if(e.getCurrentItem().getItemMeta().getDisplayName().contains("Buy")) {
 			//Buy Menu
 			e.setCancelled(true);
-			e.getWhoClicked().closeInventory();
 			buyMenu.show(p);
 		}
 		if(e.getCurrentItem().getItemMeta().getDisplayName().contains("Sell")) {
 			//Sell Menu
 			e.setCancelled(true);
-			e.getWhoClicked().closeInventory();
 			sellMenu.show(p);
 		}
 	}

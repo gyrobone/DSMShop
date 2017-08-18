@@ -23,7 +23,7 @@ public class AbstractFile {
 				e.printStackTrace();
 			}
 		}
-		this.config = YamlConfiguration.loadConfiguration(file);
+		config = YamlConfiguration.loadConfiguration(file);
 	}
 	
 	public void save() {

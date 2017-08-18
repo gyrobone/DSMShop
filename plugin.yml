@@ -1,6 +1,6 @@
 name: DSMShop
 main: com.syrical.dsmshop.DSMShop
-version: 1.0 Alpha
+version: 2.0 Alpha
 commands:
     shop:
       description: Opens Shop GUI

@@ -60,7 +60,9 @@ public class DSMShop extends JavaPlugin implements Listener {
 		if (b.getType() == Material.WALL_SIGN) {
 			Sign s = (Sign) b.getState();
 			if(s.getLine(2).toLowerCase().equalsIgnoreCase(ChatColor.DARK_GREEN + ""+ ChatColor.BOLD + "Active")) {
-				shopMenu.show(p);
+				if(s.getLine(0).toLowerCase().equalsIgnoreCase("[Shop]")) {
+					shopMenu.show(p);
+				}
 			}
 		}
 	}

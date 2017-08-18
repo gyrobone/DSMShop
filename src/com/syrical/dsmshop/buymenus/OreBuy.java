@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Arrays;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -18,20 +19,35 @@ import org.bukkit.plugin.Plugin;
 
 import com.syrical.dsmshop.AbstractFile;
 
+
 public class OreBuy extends AbstractFile implements Listener {
 	
 	private File playerFile = new File(plugin.getDataFolder(), "playerdata.yml");
 	private FileConfiguration playerConfig = YamlConfiguration.loadConfiguration(playerFile);
 	
 	private Inventory oreBuy;
-	private ItemStack diamond;
-	//coal, charcoal, clay, flint, ironingot, goldingot, diamond, emerald, quartz
+	private ItemStack coal, clay_ball, flint, iron_ingot, gold_ingot, diamond, emerald, quartz;
 	public OreBuy (Plugin plugin) {
 		super(plugin, "shopdata.yml");
-		oreBuy = Bukkit.getServer().createInventory(null, 54, "Buy Ores");
-		diamond = createItem("diamond");
+		oreBuy = Bukkit.getServer().createInventory(null, 9, "Buy Ores");
 		
-		oreBuy.setItem(0, diamond);
+		flint = createItem("flint");
+		coal = createItem("coal");
+		clay_ball = createItem("clay_ball");
+		iron_ingot = createItem("iron_ingot");
+		gold_ingot = createItem("gold_ingot");
+		diamond = createItem("diamond");
+		emerald = createItem("emerald");
+		quartz = createItem("quartz");
+		
+		oreBuy.setItem(0, flint);
+		oreBuy.setItem(1, coal);
+		oreBuy.setItem(2, clay_ball);
+		oreBuy.setItem(3, iron_ingot);
+		oreBuy.setItem(4, gold_ingot);
+		oreBuy.setItem(5, diamond);
+		oreBuy.setItem(6, emerald);
+		oreBuy.setItem(7, quartz);
 		
 		Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
 	}
@@ -45,7 +61,8 @@ public class OreBuy extends AbstractFile implements Listener {
 		Integer itemID = (Integer) config.get("default." + item + ".id");
 		ItemStack i = new ItemStack(itemID);
 		ItemMeta im = i.getItemMeta();
-		im.setLore(Arrays.asList("Left click to buy 1", "Right click to buy 32"));
+		im.setLore(Arrays.asList("Left Click to Buy 1", "Right Click to Buy 32"));
+		i.setItemMeta(im);
 		return i;
 	}
 	
@@ -55,43 +72,46 @@ public class OreBuy extends AbstractFile implements Listener {
 		Player p = (Player) e.getWhoClicked();
 		String world = p.getWorld().getName();
 		String item = e.getCurrentItem().getType().name().toLowerCase();
-		Integer buyPrice = (int) config.get(world + "." + item.toLowerCase() + ".buyprice");
-		Integer credits = (int) playerConfig.get(p.getUniqueId().toString() + ".credits");
+		Material itemMat = e.getCurrentItem().getType();
+		
+		if(e.getCurrentItem().getType() == Material.WOOL) return;
 		if (e.getCurrentItem() == null) return;
 		if(!e.getInventory().getName().equalsIgnoreCase(oreBuy.getName())) return;
 		
-		if(e.getCurrentItem().getType() == Material.DIAMOND) {
-			if(e.isRightClick()) {
-				e.setCancelled(true);
-				if(credits < buyPrice) {
-					p.sendMessage("You don't have enough credits");
-					p.closeInventory();
-					return;
-				}
-				p.chat("/removecredits " + (buyPrice * 32));
-				p.chat("/balance");
-				ItemStack diamonds = new ItemStack(Material.DIAMOND, 33);
-				p.getInventory().addItem(diamonds);
-			} else if (e.isLeftClick()){
-				e.setCancelled(true);
-				if(credits < buyPrice) {
-					p.sendMessage("You don't have enough credits");
-					p.closeInventory();
-					return;
-				}
-				p.chat("/removecredits " + buyPrice);
-				p.chat("/balance");
-				ItemStack diamonds = new ItemStack(Material.DIAMOND, 2);
-				p.getInventory().addItem(diamonds);
+		Integer buyPrice = (int) config.get(world + "." + item.toLowerCase() + ".buyprice");
+		Integer credits = (int) playerConfig.get(p.getUniqueId().toString() + ".credits");
+		
+		if(e.isRightClick()) {
+			e.setCancelled(true);
+			if(credits < buyPrice) {
+				p.sendMessage(ChatColor.RED + "You don't have enough credits");
+				p.closeInventory();
+				return;
 			}
-			if(e.isShiftClick()) {
-				p.getInventory().removeItem(new ItemStack(Material.DIAMOND,1));
+			p.chat("/removecredits " + (buyPrice * 32));
+			p.chat("/balance");
+			ItemStack items = new ItemStack(itemMat, 33);
+			p.getInventory().addItem(items);
+		} else if (e.isLeftClick()){
+			e.setCancelled(true);
+			if(credits < buyPrice) {
+				p.sendMessage(ChatColor.RED + "You don't have enough credits");
+				p.closeInventory();
+				return;
 			}
-			p.getInventory().removeItem(new ItemStack(Material.DIAMOND,1));
-			p.updateInventory();
-			p.openInventory(oreBuy);
+			p.chat("/removecredits " + buyPrice);
+			p.chat("/balance");
+			ItemStack items = new ItemStack(itemMat, 2);
+			p.getInventory().addItem(items);
 		}
 		
-	}
-	
+		if(e.isShiftClick()) {
+			p.getInventory().removeItem(new ItemStack(itemMat,1));
+		}
+		
+		p.getInventory().removeItem(new ItemStack(itemMat,1));
+		p.updateInventory();
+		p.openInventory(oreBuy);
+	}	
 }
+

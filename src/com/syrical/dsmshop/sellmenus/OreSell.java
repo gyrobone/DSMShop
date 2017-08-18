@@ -3,6 +3,7 @@ package com.syrical.dsmshop.sellmenus;
 import java.util.Arrays;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,17 +16,32 @@ import org.bukkit.plugin.Plugin;
 
 import com.syrical.dsmshop.AbstractFile;
 
+
 public class OreSell extends AbstractFile implements Listener {
 	
 	private Inventory oreSell;
-	private ItemStack diamond;
-	//coal, charcoal, clay, flint, ironingot, goldingot, diamond, emerald, quartz
+	private ItemStack coal, clay_ball, flint, iron_ingot, gold_ingot, diamond, emerald, quartz;
 	public OreSell (Plugin plugin) {
 		super(plugin, "shopdata.yml");
-		oreSell = Bukkit.getServer().createInventory(null, 54, "Sell Ores");
+		oreSell = Bukkit.getServer().createInventory(null, 9, "Sell Ores");
+
+		flint = createItem("flint");
+		coal = createItem("coal");
+		clay_ball = createItem("clay_ball");
+		iron_ingot = createItem("iron_ingot");
+		gold_ingot = createItem("gold_ingot");
 		diamond = createItem("diamond");
+		emerald = createItem("emerald");
+		quartz = createItem("quartz");
 		
-		oreSell.setItem(0, diamond);
+		oreSell.setItem(0, flint);
+		oreSell.setItem(1, coal);
+		oreSell.setItem(2, clay_ball);
+		oreSell.setItem(3, iron_ingot);
+		oreSell.setItem(4, gold_ingot);
+		oreSell.setItem(5, diamond);
+		oreSell.setItem(6, emerald);
+		oreSell.setItem(7, quartz);
 		
 		Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
 	}
@@ -39,7 +55,7 @@ public class OreSell extends AbstractFile implements Listener {
 		Integer itemID = (Integer) config.get("default." + item + ".id");
 		ItemStack i = new ItemStack(itemID);
 		ItemMeta im = i.getItemMeta();
-		im.setLore(Arrays.asList("Left click to sell 1", "Right click to sell 32"));
+		im.setLore(Arrays.asList("Left Click to Sell 1", "Right Click to Sell 32"));
 		return i;
 	}
 	
@@ -50,62 +66,62 @@ public class OreSell extends AbstractFile implements Listener {
 		String world = p.getWorld().getName();
 		if (e.getCurrentItem() == null) return;
 		String item = e.getCurrentItem().getType().name().toLowerCase();
+		Material itemMat = e.getCurrentItem().getType();
 		if(!e.getInventory().getName().equalsIgnoreCase(oreSell.getName())) return;
-		if(e.getCurrentItem().getType() == Material.DIAMOND) {
-			if(e.isRightClick()) {
-				int count = 0;
+		
+		if(e.isRightClick()) {
+			int count = 0;
 				
-				for (ItemStack stack : p.getInventory().getContents()) {
-					if (stack != null && stack.getType() == Material.DIAMOND) {
-						count += stack.getAmount();
-					}
-				}
-				
-				if (count >= 32) {
-					Integer sellPrice = (int) config.get(world + "." + item.toLowerCase() + ".sellprice");
-					e.setCancelled(true);
-					p.chat("/addcredits " + (sellPrice * 32));
-					p.chat("/balance");
-					ItemStack diamonds = new ItemStack(Material.DIAMOND, 32);
-					p.getInventory().removeItem(diamonds);
-				} else if (count < 32) {
-					Integer sellPrice = (int) config.get(world + "." + item.toLowerCase() + ".sellprice");
-					e.setCancelled(true);
-					p.chat("/addcredits " + (sellPrice * count));
-					p.chat("/balance");
-					ItemStack diamonds = new ItemStack(Material.DIAMOND, count);
-					p.getInventory().removeItem(diamonds);
-				} else if (count == 0) {
-					e.setCancelled(true);
-					p.sendMessage("You dont have any diamonds!");
-				}
-				
-			} else if (e.isLeftClick()){
-				int count = 0;
-				
-				for (ItemStack stack : p.getInventory().getContents()) {
-					if (stack != null && stack.getType() == Material.DIAMOND) {
-						count += stack.getAmount();
-					}
-				}
-				
-				if (count >= 1) {
-					Integer sellPrice = (int) config.get(world + "." + item.toLowerCase() + ".sellprice");
-					e.setCancelled(true);
-					p.chat("/addcredits " + (sellPrice * 64));
-					p.chat("/balance");
-					ItemStack diamonds = new ItemStack(Material.DIAMOND, 1);
-					p.getInventory().removeItem(diamonds);
-				} else if (count == 0) {
-					e.setCancelled(true);
-					p.sendMessage("You dont have any diamonds!");
+			for (ItemStack stack : p.getInventory().getContents()) {
+				if (stack != null && stack.getType() ==itemMat) {
+					count += stack.getAmount();
 				}
 			}
-			if(e.isShiftClick()) {
-				p.getInventory().removeItem(new ItemStack(Material.DIAMOND,1));
+			
+			if (count >= 32) {
+				Integer sellPrice = (int) config.get(world + "." + item.toLowerCase() + ".sellprice");
+				e.setCancelled(true);
+				p.chat("/addcredits " + (sellPrice * 32));
+				p.chat("/balance");
+				ItemStack items = new ItemStack(itemMat, 32);
+				p.getInventory().removeItem(items);
+			} else if (count < 32) {
+				Integer sellPrice = (int) config.get(world + "." + item.toLowerCase() + ".sellprice");
+				e.setCancelled(true);
+				p.chat("/addcredits " + (sellPrice * count));
+				p.chat("/balance");
+				ItemStack items = new ItemStack(itemMat, count);
+				p.getInventory().removeItem(items);
+			} else if (count == 0) {
+				e.setCancelled(true);
+				p.sendMessage(ChatColor.RED + "You dont have any " + e.getCurrentItem().getType().name().toLowerCase());
 			}
-			p.updateInventory();
+			
+		} else if (e.isLeftClick()){
+			int count = 0;
+			
+			for (ItemStack stack : p.getInventory().getContents()) {
+				if (stack != null && stack.getType() == itemMat) {
+					count += stack.getAmount();
+				}
+			}
+				
+			if (count >= 1) {
+				Integer sellPrice = (int) config.get(world + "." + item.toLowerCase() + ".sellprice");
+				e.setCancelled(true);
+				p.chat("/addcredits " + (sellPrice));
+				p.chat("/balance");
+				ItemStack items = new ItemStack(itemMat, 1);
+				p.getInventory().removeItem(items);
+			} else if (count == 0) {
+				e.setCancelled(true);
+				p.sendMessage(ChatColor.RED + "You dont have any " + e.getCurrentItem().getType().name().toLowerCase());
+			}
 		}
+		if(e.isShiftClick()) {
+			p.getInventory().removeItem(new ItemStack(itemMat,1));
+		}
+		p.updateInventory();
 	}
-	
 }
+

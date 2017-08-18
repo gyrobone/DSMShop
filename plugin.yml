@@ -24,3 +24,6 @@ commands:
     pay:
       description: Pay another player
       usage: /<command>
+    shopcreate:
+      description: Create a shop sign
+      usage: /<command>

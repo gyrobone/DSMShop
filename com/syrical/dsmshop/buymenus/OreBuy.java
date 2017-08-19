@@ -26,7 +26,7 @@ public class OreBuy extends AbstractFile implements Listener {
 	private FileConfiguration playerConfig = YamlConfiguration.loadConfiguration(playerFile);
 	
 	private Inventory oreBuy;
-	private ItemStack coal, clay_ball, flint, iron_ingot, gold_ingot, diamond, emerald, quartz;
+	private ItemStack coal, clay_ball, flint, redstone, iron_ingot, gold_ingot, diamond, emerald, quartz;
 	public OreBuy (Plugin plugin) {
 		super(plugin, "shopdata.yml");
 		oreBuy = Bukkit.getServer().createInventory(null, 9, "Buy Ores");
@@ -39,6 +39,7 @@ public class OreBuy extends AbstractFile implements Listener {
 		diamond = createItem("diamond");
 		emerald = createItem("emerald");
 		quartz = createItem("quartz");
+		redstone = createItem("redstone");
 		
 		oreBuy.setItem(0, flint);
 		oreBuy.setItem(1, coal);
@@ -48,6 +49,7 @@ public class OreBuy extends AbstractFile implements Listener {
 		oreBuy.setItem(5, diamond);
 		oreBuy.setItem(6, emerald);
 		oreBuy.setItem(7, quartz);
+		oreBuy.setItem(8, redstone);
 		
 		Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
 	}
@@ -80,13 +82,16 @@ public class OreBuy extends AbstractFile implements Listener {
 		
 		if(e.getCurrentItem().getType() == Material.WOOL) return;
 		if(!e.getInventory().getName().equalsIgnoreCase(oreBuy.getName())) return;
-		
+		if(config.get("default." + item.toLowerCase()) == null) {
+			e.setCancelled(true);
+			return;
+		}
 		Integer buyPrice = (int) config.get(world + "." + item.toLowerCase() + ".buyprice");
 		Integer credits = (int) playerConfig.get(p.getUniqueId().toString() + ".credits");
 		
 		if(e.isRightClick()) {
 			e.setCancelled(true);
-			if(credits < buyPrice) {
+			if(credits < buyPrice * 32) {
 				p.sendMessage(ChatColor.RED + "You don't have enough credits");
 				p.closeInventory();
 				return;

@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -53,8 +54,9 @@ public class ShopMenu implements Listener {
 	public void onInventoryClick (InventoryClickEvent e) {
 		Player p = (Player) e.getWhoClicked();
 		if (e.getCurrentItem() == null) return;
+		if (e.getCurrentItem().getType() == Material.AIR) return;
 		if(!e.getInventory().getName().equalsIgnoreCase(inv.getName())) return;
-		if(e.getCurrentItem().getItemMeta() == null) return;
+		if(e.getCurrentItem().getItemMeta().getDisplayName() == null) return;
 		if(e.getCurrentItem().getItemMeta().getDisplayName().contains("Buy")) {
 			//Buy Menu
 			e.setCancelled(true);
@@ -64,6 +66,8 @@ public class ShopMenu implements Listener {
 			//Sell Menu
 			e.setCancelled(true);
 			sellMenu.show(p);
+		} else {
+			e.setCancelled(true);
 		}
 	}
 	

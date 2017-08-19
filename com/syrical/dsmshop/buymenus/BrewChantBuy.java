@@ -20,54 +20,42 @@ import org.bukkit.plugin.Plugin;
 import com.syrical.dsmshop.AbstractFile;
 
 
-public class FoodBuy extends AbstractFile implements Listener {
+public class BrewChantBuy extends AbstractFile implements Listener {
 	
 	private File playerFile = new File(plugin.getDataFolder(), "playerdata.yml");
 	private FileConfiguration playerConfig = YamlConfiguration.loadConfiguration(playerFile);
 	
-	private Inventory FoodBuy;
-	private ItemStack cooked_beef, grilled_pork, bread, wheat, apple, cookie, carrot_item, potato_item, melon, pumpkin, sugar, seeds, melon_seeds, pumpkin_seeds, egg;
-	public FoodBuy (Plugin plugin) {
+	private Inventory BrewChantBuy;
+	private ItemStack obsidian, book, blaze_rod, glowstone_dust, sulphur, nether_stalk, ender_pearl, spider_eye, ghast_tear;
+	public BrewChantBuy (Plugin plugin) {
 		super(plugin, "shopdata.yml");
-		FoodBuy = Bukkit.getServer().createInventory(null, 18, "Buy Food");
+		BrewChantBuy = Bukkit.getServer().createInventory(null, 9, "Buy Brewing and Enchanting Items");
 		
-		cooked_beef = createItem("cooked_beef");
-		grilled_pork = createItem("grilled_pork");
-		bread = createItem("bread");
-		wheat = createItem("wheat");
-		apple = createItem("apple");
-		cookie = createItem("cookie");
-		carrot_item = createItem("carrot_item");
-		potato_item = createItem("potato_item");
-		melon = createItem("melon");
-		pumpkin = createItem("pumpkin");
-		sugar = createItem("sugar");
-		seeds = createItem("seeds");
-		melon_seeds = createItem("melon_seeds");
-		pumpkin_seeds = createItem("pumpkin_seeds");
-		egg = createItem("egg");
+		obsidian = createItem("obsidian");
+		book = createItem("book");
+		glowstone_dust = createItem("glowstone_dust");
+		sulphur = createItem("sulphur");
+		nether_stalk = createItem("nether_stalk");
+		ender_pearl = createItem("ender_pearl");
+		spider_eye = createItem("spider_eye");
+		ghast_tear = createItem("ghast_tear");
+		blaze_rod = createItem("blaze_rod");
 		
-		FoodBuy.setItem(0, cooked_beef);
-		FoodBuy.setItem(1, grilled_pork);
-		FoodBuy.setItem(2, bread);
-		FoodBuy.setItem(3, wheat);
-		FoodBuy.setItem(4, apple);
-		FoodBuy.setItem(5, cookie);
-		FoodBuy.setItem(6, carrot_item);
-		FoodBuy.setItem(7, potato_item);
-		FoodBuy.setItem(8, melon);
-		FoodBuy.setItem(9, pumpkin);
-		FoodBuy.setItem(10, sugar);
-		FoodBuy.setItem(11, seeds);
-		FoodBuy.setItem(12, melon_seeds);
-		FoodBuy.setItem(13, pumpkin_seeds);
-		FoodBuy.setItem(14, egg);
+		BrewChantBuy.setItem(0, obsidian);
+		BrewChantBuy.setItem(1, book);
+		BrewChantBuy.setItem(2, glowstone_dust);
+		BrewChantBuy.setItem(3, sulphur);
+		BrewChantBuy.setItem(4, nether_stalk);
+		BrewChantBuy.setItem(5, ender_pearl);
+		BrewChantBuy.setItem(6, spider_eye);
+		BrewChantBuy.setItem(7, ghast_tear);
+		BrewChantBuy.setItem(8, blaze_rod);
 		
 		Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 	
 	public void show (Player p) {
-		p.openInventory(FoodBuy);
+		p.openInventory(BrewChantBuy);
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -85,7 +73,7 @@ public class FoodBuy extends AbstractFile implements Listener {
 	public void onInventoryClick (InventoryClickEvent e) {
 		if (e.getCurrentItem() == null) return;
 		if (e.getCurrentItem().getType() == Material.AIR) return;
-		if(!e.getInventory().getName().equalsIgnoreCase(FoodBuy.getName())) return;
+		if(!e.getInventory().getName().equalsIgnoreCase(BrewChantBuy.getName())) return;
 		
 		Player p = (Player) e.getWhoClicked();
 		String world = p.getWorld().getName();
@@ -93,12 +81,11 @@ public class FoodBuy extends AbstractFile implements Listener {
 		Material itemMat = e.getCurrentItem().getType();
 		
 		if(e.getCurrentItem().getType() == Material.WOOL) return;
-		if(!e.getInventory().getName().equalsIgnoreCase(FoodBuy.getName())) return;
+		if(!e.getInventory().getName().equalsIgnoreCase(BrewChantBuy.getName())) return;
 		if(config.get("default." + item.toLowerCase()) == null) {
 			e.setCancelled(true);
 			return;
 		}
-		
 		Integer buyPrice = (int) config.get(world + "." + item.toLowerCase() + ".buyprice");
 		Integer credits = (int) playerConfig.get(p.getUniqueId().toString() + ".credits");
 		
@@ -132,7 +119,7 @@ public class FoodBuy extends AbstractFile implements Listener {
 		
 		p.getInventory().removeItem(new ItemStack(itemMat,1));
 		p.updateInventory();
-		p.openInventory(FoodBuy);
+		p.openInventory(BrewChantBuy);
 	}	
 }
 

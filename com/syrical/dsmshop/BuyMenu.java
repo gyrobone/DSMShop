@@ -14,26 +14,36 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Wool;
 import org.bukkit.plugin.Plugin;
 
+import com.syrical.dsmshop.buymenus.BrewChantBuy;
+import com.syrical.dsmshop.buymenus.DyeBuy;
 import com.syrical.dsmshop.buymenus.FoodBuy;
 import com.syrical.dsmshop.buymenus.OreBuy;
 
 public class BuyMenu implements Listener {
 
 	private Inventory buyInv;
-	private ItemStack ores, food;
+	private ItemStack ores, food, brewchant, dyes;
 	private FoodBuy foodBuy;
 	private OreBuy oreBuy;
+	private BrewChantBuy brewchantBuy;
+	private DyeBuy	dyeBuy;
 	
 	public BuyMenu(Plugin plugin) {
 		buyInv = Bukkit.getServer().createInventory(null, 9, "Buy Menu");
 		ores = createItem(DyeColor.GREEN, "Buy Ores");
 		food = createItem(DyeColor.YELLOW, "Buy Food");
+		brewchant = createItem(DyeColor.PURPLE, "Buy Brewing and Enchanting Items");
+		dyes = createItem(DyeColor.BLACK, "Buy Dyes");
 		
 		oreBuy = new OreBuy(plugin);
 		foodBuy = new FoodBuy(plugin);
+		brewchantBuy = new BrewChantBuy(plugin);
+		dyeBuy = new DyeBuy(plugin);
 		
 		buyInv.setItem(0, ores);
 		buyInv.setItem(1, food);
+		buyInv.setItem(2, brewchant);
+		buyInv.setItem(3, dyes);
 
 		Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
 	}
@@ -64,6 +74,12 @@ public class BuyMenu implements Listener {
 		} else if(e.getCurrentItem().getItemMeta().getDisplayName().contains("Buy Food")) {
 			e.setCancelled(true);
 			foodBuy.show(p);
+		} else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Buy Brewing and Enchanting Items")) {
+			e.setCancelled(true);
+			brewchantBuy.show(p);
+		} else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Buy Dyes")) {
+			e.setCancelled(true);
+			dyeBuy.show(p);
 		}
 	}
 	

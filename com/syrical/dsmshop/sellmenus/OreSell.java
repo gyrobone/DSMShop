@@ -20,7 +20,7 @@ import com.syrical.dsmshop.AbstractFile;
 public class OreSell extends AbstractFile implements Listener {
 	
 	private Inventory oreSell;
-	private ItemStack coal, clay_ball, flint, iron_ingot, gold_ingot, diamond, emerald, quartz;
+	private ItemStack coal, clay_ball, flint, redstone, iron_ingot, gold_ingot, diamond, emerald, quartz;
 	public OreSell (Plugin plugin) {
 		super(plugin, "shopdata.yml");
 		oreSell = Bukkit.getServer().createInventory(null, 9, "Sell Ores");
@@ -33,6 +33,7 @@ public class OreSell extends AbstractFile implements Listener {
 		diamond = createItem("diamond");
 		emerald = createItem("emerald");
 		quartz = createItem("quartz");
+		redstone = createItem("redstone");
 		
 		oreSell.setItem(0, flint);
 		oreSell.setItem(1, coal);
@@ -42,6 +43,7 @@ public class OreSell extends AbstractFile implements Listener {
 		oreSell.setItem(5, diamond);
 		oreSell.setItem(6, emerald);
 		oreSell.setItem(7, quartz);
+		oreSell.setItem(8, redstone);
 		
 		Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
 	}
@@ -68,6 +70,10 @@ public class OreSell extends AbstractFile implements Listener {
 		if (e.getCurrentItem().getType() == Material.AIR) return;
 		if(!e.getInventory().getName().equalsIgnoreCase(oreSell.getName())) return;
 		String item = e.getCurrentItem().getType().name().toLowerCase();
+		if(config.get("default." + item.toLowerCase()) == null) {
+			e.setCancelled(true);
+			return;
+		}
 		Material itemMat = e.getCurrentItem().getType();
 		if(!e.getInventory().getName().equalsIgnoreCase(oreSell.getName())) return;
 		

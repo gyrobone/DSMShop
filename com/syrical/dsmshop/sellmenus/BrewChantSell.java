@@ -17,51 +17,39 @@ import org.bukkit.plugin.Plugin;
 import com.syrical.dsmshop.AbstractFile;
 
 
-public class FoodSell extends AbstractFile implements Listener {
+public class BrewChantSell extends AbstractFile implements Listener {
 	
-	private Inventory FoodSell;
-	private ItemStack cooked_beef, grilled_pork, bread, wheat, apple, cookie, carrot_item, potato_item, melon, pumpkin, sugar, seeds, melon_seeds, pumpkin_seeds, egg;
-	public FoodSell (Plugin plugin) {
+	private Inventory BrewChantSell;
+	private ItemStack obsidian, book, blaze_rod, glowstone_dust, sulphur, nether_stalk, ender_pearl, spider_eye, ghast_tear;
+	public BrewChantSell (Plugin plugin) {
 		super(plugin, "shopdata.yml");
-		FoodSell = Bukkit.getServer().createInventory(null, 18, "Sell Food");
+		BrewChantSell = Bukkit.getServer().createInventory(null, 9, "Sell Brewing and Enchanting Items");
 
-		cooked_beef = createItem("cooked_beef");
-		grilled_pork = createItem("grilled_pork");
-		bread = createItem("bread");
-		wheat = createItem("wheat");
-		apple = createItem("apple");
-		cookie = createItem("cookie");
-		carrot_item = createItem("carrot_item");
-		potato_item = createItem("potato_item");
-		melon = createItem("melon");
-		pumpkin = createItem("pumpkin");
-		sugar = createItem("sugar");
-		seeds = createItem("seeds");
-		melon_seeds = createItem("melon_seeds");
-		pumpkin_seeds = createItem("pumpkin_seeds");
-		egg = createItem("egg");
+		obsidian = createItem("obsidian");
+		book = createItem("book");
+		glowstone_dust = createItem("glowstone_dust");
+		sulphur = createItem("sulphur");
+		nether_stalk = createItem("nether_stalk");
+		ender_pearl = createItem("ender_pearl");
+		spider_eye = createItem("spider_eye");
+		ghast_tear = createItem("ghast_tear");
+		blaze_rod = createItem("blaze_rod");
 		
-		FoodSell.setItem(0, cooked_beef);
-		FoodSell.setItem(1, grilled_pork);
-		FoodSell.setItem(2, bread);
-		FoodSell.setItem(3, wheat);
-		FoodSell.setItem(4, apple);
-		FoodSell.setItem(5, cookie);
-		FoodSell.setItem(6, carrot_item);
-		FoodSell.setItem(7, potato_item);
-		FoodSell.setItem(8, melon);
-		FoodSell.setItem(9, pumpkin);
-		FoodSell.setItem(10, sugar);
-		FoodSell.setItem(11, seeds);
-		FoodSell.setItem(12, melon_seeds);
-		FoodSell.setItem(13, pumpkin_seeds);
-		FoodSell.setItem(14, egg);
+		BrewChantSell.setItem(0, obsidian);
+		BrewChantSell.setItem(1, book);
+		BrewChantSell.setItem(2, glowstone_dust);
+		BrewChantSell.setItem(3, sulphur);
+		BrewChantSell.setItem(4, nether_stalk);
+		BrewChantSell.setItem(5, ender_pearl);
+		BrewChantSell.setItem(6, spider_eye);
+		BrewChantSell.setItem(7, ghast_tear);
+		BrewChantSell.setItem(8, blaze_rod);
 		
 		Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 	
 	public void show (Player p) {
-		p.openInventory(FoodSell);
+		p.openInventory(BrewChantSell);
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -80,14 +68,14 @@ public class FoodSell extends AbstractFile implements Listener {
 		String world = p.getWorld().getName();
 		if (e.getCurrentItem() == null) return;
 		if (e.getCurrentItem().getType() == Material.AIR) return;
-		if(!e.getInventory().getName().equalsIgnoreCase(FoodSell.getName())) return;
+		if(!e.getInventory().getName().equalsIgnoreCase(BrewChantSell.getName())) return;
 		String item = e.getCurrentItem().getType().name().toLowerCase();
+		Material itemMat = e.getCurrentItem().getType();
 		if(config.get("default." + item.toLowerCase()) == null) {
 			e.setCancelled(true);
 			return;
 		}
-		Material itemMat = e.getCurrentItem().getType();
-		if(!e.getInventory().getName().equalsIgnoreCase(FoodSell.getName())) return;
+		if(!e.getInventory().getName().equalsIgnoreCase(BrewChantSell.getName())) return;
 		
 		if(e.isRightClick()) {
 			int count = 0;
@@ -105,6 +93,7 @@ public class FoodSell extends AbstractFile implements Listener {
 				p.chat("/balance");
 				ItemStack items = new ItemStack(itemMat, 32);
 				p.getInventory().removeItem(items);
+				return;
 			} else if (count < 32) {
 				Integer sellPrice = (int) config.get(world + "." + item.toLowerCase() + ".sellprice");
 				e.setCancelled(true);
@@ -112,6 +101,7 @@ public class FoodSell extends AbstractFile implements Listener {
 				p.chat("/balance");
 				ItemStack items = new ItemStack(itemMat, count);
 				p.getInventory().removeItem(items);
+				return;
 			} else if (count == 0) {
 				e.setCancelled(true);
 				p.sendMessage(ChatColor.RED + "You dont have any " + e.getCurrentItem().getType().name().toLowerCase());
@@ -133,6 +123,7 @@ public class FoodSell extends AbstractFile implements Listener {
 				p.chat("/balance");
 				ItemStack items = new ItemStack(itemMat, 1);
 				p.getInventory().removeItem(items);
+				return;
 			} else if (count == 0) {
 				e.setCancelled(true);
 				p.sendMessage(ChatColor.RED + "You dont have any " + e.getCurrentItem().getType().name().toLowerCase());

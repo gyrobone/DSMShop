@@ -109,9 +109,16 @@ public class SellMenu extends AbstractFile implements Listener {
 	@SuppressWarnings("deprecation")
 	private ItemStack createItem (String item) {
 		Integer itemID = (Integer) config.get("default." + item + ".id");
+		
+		Integer priceCarinus = (int) config.get("world_carinus." + item.toLowerCase() + ".sellprice");
+		Integer priceDamara = (int) config.get("world_damara." + item.toLowerCase() + ".sellprice");
+		Integer priceOpia3 = (int) config.get("world_opia3." + item.toLowerCase() + ".sellprice");
+		Integer priceSirona = (int) config.get("world_sirona." + item.toLowerCase() + ".sellprice");
+		
 		ItemStack i = new ItemStack(itemID);
 		ItemMeta im = i.getItemMeta();
-		im.setLore(Arrays.asList("Left Click to Sell 1", "Right Click to Sell 32"));
+		im.setLore(Arrays.asList("Carinus: " + priceCarinus + " credits", "Damara: " + priceDamara + " credits", "Opia 3: " + priceOpia3 + " credits", "Sirona: " + priceSirona + " credits"));
+		i.setItemMeta(im);
 		return i;
 	}
 	

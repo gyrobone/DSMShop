@@ -1,9 +1,7 @@
 package com.syrical.dsmshop;
 
-import java.util.Arrays;
-
 import org.bukkit.Bukkit;
-import org.bukkit.DyeColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,7 +9,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.material.Wool;
 import org.bukkit.plugin.Plugin;
 
 import com.syrical.dsmshop.buymenus.BrewChantBuy;
@@ -30,10 +27,10 @@ public class BuyMenu implements Listener {
 	
 	public BuyMenu(Plugin plugin) {
 		buyInv = Bukkit.getServer().createInventory(null, 9, "Buy Menu");
-		ores = createItem(DyeColor.GREEN, "Buy Ores");
-		food = createItem(DyeColor.YELLOW, "Buy Food");
-		brewchant = createItem(DyeColor.PURPLE, "Buy Brewing and Enchanting Items");
-		dyes = createItem(DyeColor.BLACK, "Buy Dyes");
+		ores = createItem(Material.IRON_ORE, "Buy Ores");
+		food = createItem(Material.COOKED_BEEF, "Buy Food");
+		brewchant = createItem(Material.ENCHANTMENT_TABLE, "Buy Brewing and Enchanting Items");
+		dyes = createItem(Material.WOOL, "Buy Dyes");
 		
 		oreBuy = new OreBuy(plugin);
 		foodBuy = new FoodBuy(plugin);
@@ -48,14 +45,12 @@ public class BuyMenu implements Listener {
 		Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 	
-	private ItemStack createItem(DyeColor dc, String name) {
-		ItemStack i = new Wool(dc).toItemStack(1);
+	private ItemStack createItem (Material itemStack, String name) {
+		ItemStack i = new ItemStack(itemStack);
 		ItemMeta im = i.getItemMeta();
 		im.setDisplayName(name);
-		im.setLore(Arrays.asList("Open " + name + " Menu"));
 		i.setItemMeta(im);
 		return i;
-		
 	}
 	
 	public void show (Player p) {

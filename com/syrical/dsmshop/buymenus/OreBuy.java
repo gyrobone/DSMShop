@@ -27,6 +27,7 @@ public class OreBuy extends AbstractFile implements Listener {
 	
 	private Inventory oreBuy;
 	private ItemStack coal, clay_ball, flint, redstone, iron_ingot, gold_ingot, diamond, emerald, quartz;
+	
 	public OreBuy (Plugin plugin) {
 		super(plugin, "shopdata.yml");
 		oreBuy = Bukkit.getServer().createInventory(null, 9, "Buy Ores");
@@ -61,9 +62,15 @@ public class OreBuy extends AbstractFile implements Listener {
 	@SuppressWarnings("deprecation")
 	private ItemStack createItem (String item) {
 		Integer itemID = (Integer) config.get("default." + item + ".id");
+		
+		Integer priceCarinus = (int) config.get("world_carinus." + item.toLowerCase() + ".buyprice");
+		Integer priceDamara = (int) config.get("world_damara." + item.toLowerCase() + ".buyprice");
+		Integer priceOpia3 = (int) config.get("world_opia3." + item.toLowerCase() + ".buyprice");
+		Integer priceSirona = (int) config.get("world_sirona." + item.toLowerCase() + ".buyprice");
+		
 		ItemStack i = new ItemStack(itemID);
 		ItemMeta im = i.getItemMeta();
-		im.setLore(Arrays.asList("Left Click to Buy 1", "Right Click to Buy 32"));
+		im.setLore(Arrays.asList("Carinus: " + priceCarinus + " credits", "Damara: " + priceDamara + " credits", "Opia 3: " + priceOpia3 + " credits", "Sirona: " + priceSirona + " credits"));
 		i.setItemMeta(im);
 		return i;
 	}
